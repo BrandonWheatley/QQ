@@ -115,7 +115,6 @@ feature card -> reference Dev against Staging and see what changes there are.
     2.  `git pull origin staging`
     3.  `git checkout -b test_suite/sprint_XXX`
 
-
 Cypress related branches are merged into both QA and Staging at the same time to keep things consistent across environments because
 the Cypress suite is self-contained and won’t affect the rest of the app. I generally wait until all the sprint's cards
 have been progressed to Ready for Release before merging my Cypress changes to ensure I include any 'gotcha's in the test.
@@ -146,14 +145,6 @@ reach out if you're unsure.
 
 ## Tips and Tricks
 
-- There are several useful common functions abstracted to the `support/commands.js` files.
-  Check 'em out! (And feel free to improve, edit, and add your own!)
-- An effort has been made to add `data-cy` selectors to commonly used dom elements to make the suite more robust
-  and less prone to failure due to silly things like style changes, class changes, etc. These are usually fairly easy to implement
-  and if you find yourself interacting with the same element (a submit button, a “Show Filters” button, etc)
-  it is probably a good idea to add one to the file!
-- If you're looking for something to do there are several `//todo`s throughout the suite, try searching for them and seeing what you
-  can come up with!
 
 ---
 
