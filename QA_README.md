@@ -102,8 +102,9 @@ What type of user were you logged in as?
 What were you doing that caused the issue?
 Can you reliably reproduce the issue or is it intermittent?
 
-
-Is this happening in every development environment or only dev? Is it in staging? Production?
+Another powerful tool for verifying where and when a bug was introduced is cross referencing environments. Is this happening in every development 
+environment or only dev? Is it in staging? Production? You can also do this if you're ever unsure of what you're supposed to be seeing in a given
+feature card -> reference Dev against Staging and see what changes there are.
 
 ---
 
