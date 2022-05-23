@@ -111,6 +111,7 @@ is a situation we want to avoid.
 Another powerful tool for verifying where and when a bug was introduced is cross referencing development environments. Is this happening in every
 environment or only dev? Is it in staging? Production? You can also do this if you're ever unsure of what you're supposed to be seeing in a given
 feature card by referencing Dev against Staging/Production and seeing what changes there are.
+
 ---
 ## Cypress Testing
 
