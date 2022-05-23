@@ -15,15 +15,104 @@ Once you get settled in and acclimated to ${project_name} as a whole your time w
 1.  Manual testing
 2.  Cypress testing
 
-Manual testing is exactly what it sounds like - manually testing features/bug fixes to validate their performance against the business's
-acceptance criteria and then going beyond the confines of the [happy path](https://en.wikipedia.org/wiki/Happy_path)
-in an attempt to stamp out edge case scenarios. This testing is generally limited to the scope of the feature/bug fix but can
-expand to obviously related features that may or may not have been directly touched in the code itself (for example, if there is
-a change made to ${project_feature}, might not be a bad idea to check other areas the ${project_feature} is used).
-
 ---
+## Manual Testing
 
-## Getting Started with Cypress
+Manual testing is exactly what it sounds like - manually testing features/bug fixes to validate their performance against the business's
+[acceptance criteria](https://en.wikipedia.org/wiki/Acceptance_testing) and then going beyond the confines of the [happy path](https://en.wikipedia.org/wiki/Happy_path)
+in an attempt to identify broken edge case scenarios. This testing is generally limited to the scope of the feature/bug fix but can
+expand to obviously related features that may or may not have been directly touched in the code itself (for example, if there is
+a change made to ${project_feature} of ${page}, might not be a bad idea to check other areas ${project_feature} is used).
+
+Say a feature card introduces a Whole Positive Number Addition Page. 
+The AC says: 
+> 1. On the Whole Positive Number Addition Page there are two user input fields, a submit button, and a result field.
+>    1. When users enter whole positive numbers into the input fields and presses 'Submit'
+>    2. The two numbers will be added and the result will display in the result.
+
+You load up the page
+
+    [  2  ]  +   [  3  ]  =  [  5  ]
+
+Seems easy enough, how could anyone mess this up?
+
+Let us count the ways...
+
+
+    [  two  ]  +   [  three  ]  =  [  error  ]
+    [  two  ]  +   [  3  ]  =  [  error  ]
+    [  2.2  ]  +   [  3  ]  =  [  error  ]
+    [  2  ]  +   [  -3  ]  =  [  error  ]
+    [  null  ]  +   [  3  ]  =  [  error  ]
+    [  2  ]  +   [  3%  ]  =  [  error  ]
+    [  2  ]  +   [  1/3  ]  =  [  error  ]
+    [  2 + 3  ]  +   [  null  ]  =  [  error  ]
+    [ www.virus.com/exe ] + [  3  ] = [  error  ]
+
+And every combination of the above plus probably 10 more I haven't thought of. The point is - Your goal is to ensure what the client wants to happen is happening and
+what they don't want isn't. Now after spending 5 hours of your time (and the client's money) testing and documenting every possible combination of errant inputs, 
+you proudly go to your dev team with the results.
+
+Don't get me wrong, the exhaustive list is impressive, but you could have saved a lot of your time and energy by instead saying at the beginning "Hey, we should probably 
+implement regex validation on the input so it only accepts whole positive integers and nothing funky". Being on the lookout for solutions to problems is yet another skill to 
+develop for your toolbox.
+### Reporting a Bug
+
+The most important aspect of bug reporting is having clear, concise, detailed information. Giving the dev as much context as possible will help
+expedite the understanding, diagnosing, and solving of a given issue. Make a habit of always browsing with your console or network tabs open
+to give you better insight into the machinations of the project as well as catch any silent failures. 
+
+Grabbing screenshots of [console errors](https://developer.chrome.com/docs/devtools/console/log/) and [copying cURLs](https://everything.curl.dev/usingcurl/copyas) 
+from network failures should be go-to tools in your QA toolbelt. You should always be reducing the time it takes for the dev to understand, and ultimately fix, a bug.
+
+As your comfort and familiarity with debugging tools and the project increases so too will your ability to provide details.
+The progress of your reports may go something like this...
+
+
+Day 0:
+> I pressed the 'Submit' button and the page broke.
+
+Day 1 (after reading this amazing readme):
+> I pressed the 'Submit' button and the page broke. Here's a screenshot of the console error and copy of the cURL.
+
+Day 15:
+> I pressed the 'Submit' button and the page broke. Here's a screenshot of the console error and copy of the cURL. I ran the project locally and inserted 
+> some console.log()s, it looks like 'user_type_id' is undefined in the user detail page.
+
+Day 30: 
+> I pressed the 'Submit' button and the page broke. Here's a screenshot of the console error and copy of the cURL. I ran the project locally and inserted 
+> some console.log()s, it looks like 'user_type_id' is undefined in the user detail page. I also looked at the API it it's expecting 'user_types_id' 
+> not 'user_type_id'.
+
+Day 60:
+> I pressed the 'Submit' button and the page broke. Here's a screenshot of the console error and copy of the cURL. I ran the project locally and inserted 
+> some console.log()s, it looks like 'user_type_id' is undefined in the user detail page. I also looked at the API it it's expecting 'user_types_id' 
+> not 'user_type_id'. Here's a PR for a fix, check it out when you get a chance.
+
+At any stage of your progress an integral part of communicating an issue is giving important contextual information. The bug you've found may happening universally or it may
+be limited to one specific set of variables and relaying that to the devs is crucial for quick rememdy.
+
+Context to consider:
+- What user were you logged in as?
+    - Is this happening with other users?
+- What were you doing before it occured?
+    - Does it happen if you navigate to the page directly via url? From other pages? 
+- Can you reliably reproduce the issue or is it intermittent?
+    - If it is intermittent, are there any common denominators among the instances?
+- Is this mock data or data pulled from production?
+    - Has there recently been a database schema change that historical data may be missing?
+- Which variables seem to be genuinely related and which are red herrings?
+
+Excluding rare circumstances (ie finding a showstopper bug the day of a deployment, in which case you would want to sound the alarms immediately) you will
+want to take time to explore and understand a bug before reporting it. The more information you can gather (and questions you have answered) before 
+reporting it to the dev, the better. Telling a dev "hey, the page is broken" and responding "...uh, hold on, let me check" when they ask a basic follow up question
+is a situation we want to avoid.
+
+Another powerful tool for verifying where and when a bug was introduced is cross referencing development environments. Is this happening in every
+environment or only dev? Is it in staging? Production? You can also do this if you're ever unsure of what you're supposed to be seeing in a given
+feature card by referencing Dev against Staging/Production and seeing what changes there are.
+---
+## Cypress Testing
 
 
 If you're setting up Cypress for the first time, follow [these instructions](https://docs.cypress.io/guides/getting-started/installing-cypress).
@@ -42,7 +131,8 @@ Follow [these instructions](https://docs.cypress.io/guides/guides/command-line) 
 2.  `npm run cypress:open`
     - This will open the [Cypress Test Runner GUI](https://docs.cypress.io/guides/core-concepts/test-runner#Overview) and allow you to run individual tests manually
       and is the view you'll spend the bulk of your Cypress time with. The GUI is very powerful tool and it would serve you well to get acquainted with it!
-      The [Selector Playground](https://docs.cypress.io/guides/core-concepts/test-runner#Selector-Playground) is especially useful when writing new tests (or finding new candidates for [data-cy selectors](https://docs.cypress.io/guides/references/best-practices#Selecting-Elements))!
+      The [Selector Playground](https://docs.cypress.io/guides/core-concepts/test-runner#Selector-Playground) is especially useful when writing new tests 
+      (or finding new candidates for [data-cy selectors](https://docs.cypress.io/guides/references/best-practices#Selecting-Elements))!
 
 ---
 
@@ -84,27 +174,7 @@ Follow [these instructions](https://docs.cypress.io/guides/guides/command-line) 
 6)  Best practice is to run the Suite as a whole in the Staging environment
     once all cards have made their way in (or if large individual features go up).
 
-7)  Since we deploy on Tuesdays, running the Suite on Friday evening/Monday morning is a good habit to get into.
-    Keeps everyone’s nerves at bay.
-
----
-
-## Reporting a Bug
-
-The most important aspect of bug reporting is having clear, concise, detailed information. Giving the dev as much context as possible will help
-expedite the understanding, diagnosing, and solving of a given issue. Make a habit of always browsing with your console or network tabs open
-to give you better insight into the machinations of the project as well as catch any silent failures. Grabbing screenshots of console errors and
-copying cURLs from network failures should be go-to tools in your QA toolbelt. Your goal should always be reducing the time it takes for the dev
-to understand, and ultimately fix, a bug.
-
-Context to consider:
-- What type of user were you logged in as?
-- What were you doing that caused the issue?
-- Can you reliably reproduce the issue or is it intermittent?
-
-Another powerful tool for verifying where and when a bug was introduced is cross referencing environments. Is this happening in every development 
-environment or only dev? Is it in staging? Production? You can also do this if you're ever unsure of what you're supposed to be seeing in a given
-feature card -> reference Dev against Staging and see what changes there are.
+7)  //insert information about deployment schedule here
 
 ---
 
@@ -160,4 +230,4 @@ reach out if you're unsure.
 - [Cypress Assertions](https://docs.cypress.io/guides/references/assertions)
 
 
-A Brandon Wheatley, Cypress Czar™ Production
+a Brandon QQ™ Wheatley Production
